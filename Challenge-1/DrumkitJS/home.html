@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>JS Drum Kit</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+
+  <div class="keys">
+    <div data-key="65" class="key">
+      <kbd>A</kbd>
+      <span class="sound">clap</span>
+    </div>
+    <div data-key="83" class="key">
+      <kbd>S</kbd>
+      <span class="sound">hihat</span>
+    </div>
+    <div data-key="68" class="key">
+      <kbd>D</kbd>
+      <span class="sound">kick</span>
+    </div>
+    <div data-key="70" class="key">
+      <kbd>F</kbd>
+      <span class="sound">openhat</span>
+    </div>
+    <div data-key="71" class="key">
+      <kbd>G</kbd>
+      <span class="sound">boom</span>
+    </div>
+    <div data-key="72" class="key">
+      <kbd>H</kbd>
+      <span class="sound">ride</span>
+    </div>
+    <div data-key="74" class="key">
+      <kbd>J</kbd>
+      <span class="sound">snare</span>
+    </div>
+    <div data-key="75" class="key">
+      <kbd>K</kbd>
+      <span class="sound">tom</span>
+    </div>
+    <div data-key="76" class="key">
+      <kbd>L</kbd>
+      <span class="sound">tink</span>
+    </div>
+  </div>
+
+  <audio data-key="65" src="sounds/clap.wav"></audio>
+  <audio data-key="83" src="sounds/hihat.wav"></audio>
+  <audio data-key="68" src="sounds/kick.wav"></audio>
+  <audio data-key="70" src="sounds/openhat.wav"></audio>
+  <audio data-key="71" src="sounds/boom.wav"></audio>
+  <audio data-key="72" src="sounds/ride.wav"></audio>
+  <audio data-key="74" src="sounds/snare.wav"></audio>
+  <audio data-key="75" src="sounds/tom.wav"></audio>
+  <audio data-key="76" src="sounds/tink.wav"></audio>
+
+  <script>
+    // Listening for a keypress event in the window object
+    window.addEventListener('keydown', function (e) {
+
+      // Selecting audio and keys from the input
+      const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+      const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+
+      // If input key is present than add the class playing for the transition
+      try {
+        key.classList.add(`playing`);
+
+      // Make the play time of the audio=0 every time key is pressed (Audio will start over every time  a key is pressed)
+        audio.currentTime = 0;
+        audio.play();
+      }
+
+      // If input is other than the mentioned keys than give Invalid Input error
+      catch {
+        console.log('Invalid input error');
+      }
+
+    })
+
+    // Selecting all the key from the html
+    const keys = document.querySelectorAll(`.key`);
+
+    // When transition of the .key div ends than call/trigger the removeTransition method 
+    keys.forEach(key => key.addEventListener(`transitionend`, removeTransition));
+
+    // Removing Transition function
+    function removeTransition(e) {
+
+      // As soon as the transition of the .key div ends the playing class will be removed
+      try {
+        this.classList.remove(`playing`)
+      }
+      // If input is other than the mentioned keys than give the invalid input error
+      catch {
+        console.log(`Invalid input error`);
+      }
+    }
+  </script>
+
+</body>
+
+</html>
