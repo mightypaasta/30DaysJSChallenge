@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>HTML5 Canvas</title>
+</head>
+
+<body>
+
+  // canavas will provide a window to render the 2d and 3d graphics
+  <canvas id="draw" width="800" height="800"></canvas>
+
+  <script>
+    const canvas = document.querySelector('#draw');
+
+    // context will allow us to render graphics on the canvas eihter 2d or 3d graphics 
+    const ctx = canvas.getContext('2d');
+
+    // window.innerWidth will set the width of the canvas to the width of the current window width
+    // window.innerHeight will set the height of the canvas to the height of the current window height
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    // line join will round the corner when direction of line changes 
+    ctx.lineJoin = 'round';
+
+    // line cap will round the ends of the line segment 
+    ctx.lineCap = 'round';
+
+    // line width will set the width of the line drawn on the canvs
+    ctx.lineWidth = 1;
+
+    // isDrawing will keep track of the mouse on the canvas after mousedown event
+    let isDrawing = false;
+
+    // lastX and lasY will track mouse pointer coordinates on the canvas
+    let lastX = 0;
+    let lastY = 0;
+
+    // hue will change the strokeStyle(color) of the stroke
+    let hue = 0;
+
+    // direction will keep track when to change the lineWidth of the stroke
+    let direction = true;
+
+    // this will start drawing on the canvas after the mousedown event followed by mousemove event
+    function draw(e) {
+      if (!isDrawing) return;
+
+      // This will set the path for the stroke
+      ctx.beginPath();
+      // This will be the starting point of the stroke line
+      ctx.moveTo(lastX, lastY);
+      // This will be the destination point of the stroke line
+      ctx.lineTo(e.offsetX, e.offsetY);
+      // storke() function will color or add the stroke to the line
+      ctx.stroke();
+      // stroke color(style) will change with each movement of the mouse
+      ctx.strokeStyle = `hsl(${hue++},100%,50%)`;
+
+      // when the value of hue will reach max(360) then this will reset it to 0.
+      hue = hue > 360 ? 0 : hue;
+
+      // if the lineWidth>=100 then start decresing it upto 1 (i.e set direction to false).
+      if (ctx.lineWidth >= 100) direction = false;
+
+      // when the lineWidth<=1 then start increasing it upto 100(i.e set direction to true).
+      if (ctx.lineWidth <= 1) direction = true;
+
+      // if direction is true, lineWidth will increase and vice-versa.
+      direction ? ctx.lineWidth++ : ctx.lineWidth--;
+
+      // when mousedown event occur ,set the lastX and lastY to the current position of the mouse poiner.
+      // so wherever the mouse pointer is clicked (i.e mousedown event occur) the line/stroke will start from that position.
+      [lastX, lastY] = [e.offsetX, e.offsetY];
+
+    }
+
+    // when the mouse is clicked the drawing will start up until the mouseup or mouseout event.
+    canvas.addEventListener('mousedown', (e) => {
+      isDrawing = true;
+      [lastX, lastY] = [e.offsetX, e.offsetY];
+    });
+
+    // after the mousedown event , line will be drawn with the mousemove event.
+    canvas.addEventListener('mousemove', draw);
+
+    // if the mouseup(not clicked) or mouseout(mouse pointer is out of canvas) drawing will stop.
+    canvas.addEventListener('mouseup', () => isDrawing = false);
+    canvas.addEventListener('mouseout', () => isDrawing = false);
+  </script>
+
+  <style>
+    html,
+    body {
+      margin: 0;
+    }
+  </style>
+
+</body>
+
+</html>
