@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Console Tricks!</title>
+</head>
+<body>
+
+  <p onClick="makeGreen()">×BREAK×DOWN×</p>
+
+  <script>
+    const dogs = [{ name: 'Snickers', age: 2 }, { name: 'hugo', age: 8 }];
+
+    function makeGreen() {
+      const p = document.querySelector('p');
+      p.style.color = '#BADA55';
+      p.style.fontSize = '50px';
+    }
+
+    // Regular
+    console.log('Hello World');
+
+    // Interpolated
+    console.log(`Hello World have some of these %s`,'SHITT!!');
+
+    // Styled
+    console.log('%c Hello World in stylized version','font-size:20px; background-color:green')
+
+    // warning!
+    console.warn('Hello World this is a warning!!');
+
+    // Error :|
+    console.error('Hello World this is a error');
+
+    // Info
+    console.info('Hello World this is a information');
+
+    // Testing
+    console.assert(1===2 , '1 is not equal to 2 u shit head')
+
+    // clearing
+
+    console.clear();
+    
+    // Viewing DOM Elements
+    
+    const p=document.querySelector('p')
+    console.dir(p);
+
+    // Grouping together
+
+    dogs.forEach(dog => {
+      console.groupCollapsed(`${dog.name}`);
+      console.log(`This is ${dog.name}`);
+      console.log(`${dog.name} is ${dog.age} years old`);
+      console.groupEnd(`${dog.name}`);
+    });
+
+    // counting
+    
+    console.count('Hello World')
+    console.count('Hello World')
+    console.count('Hello World')
+    console.count('Hello World')
+    console.count('Holla')
+    console.count('Holla')
+    console.count('Holla')
+    console.count('Holla')
+    console.count('Holla')
+    console.count('Holla')
+    console.count('Holla')
+    console.count('Holla')
+    console.count('Hello World')
+    console.count('Hello World')
+    console.count('Hello World')
+    
+    // timing
+
+    // console.time will give the time taken by the code/function before reaching the console.timeEnd()
+    // code.timeEnd() will stop the timer and display the result
+
+    // Apparently the time taken is greater when the timeEnd is inside the second promise as compared to 
+    // when it is outside the second promise.
+
+    console.time('fetching data');
+    fetch('https://api.github.com/users/wesbos')
+      .then(data => data.json())
+      .then(data => {
+        console.log(data);
+      })
+    console.timeEnd('fetching data');
+
+  </script>
+</body>
+</html>
