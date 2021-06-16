@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Key Detection</title>
+  <script type="text/javascript" src="https://www.cornify.com/js/cornify.js"></script>
+</head>
+<body>
+<script>
+
+  const pressed=[];
+  const secretCode='boobie'
+
+window.addEventListener('keyup',(e) => {
+  pressed.push(e.key);
+  
+  // pressed.splice(-secretCode.length-1) will allow the array to not allow the pressed[] to have more characters than secretCode.length
+  // and pressed.length-secretCode.length is basically = 1 because the splice function will not run unless the pressed array size beomes equal to the -secretCode-1 
+  // for e.g 
+
+  // for secretCode'wesbos'(length =6) -secretCode.length-1 =7
+  // and splice function will not run unless pressed.length = 1
+  // as soon as the the 7th character is added to function the the splice function will get to its work.
+  // and pressed.length(7)-secretCode.length(6) = 1 (for any e.g second parameter should always be 1)
+  
+  // Now in short for above eg.
+  // the splice function will remove the leftmost character for every new character added after pressed[] reach the length of 6.
+  // so we can say that for every 7th character added to the pressed[] 
+  // the splice function will remove the leftmost character
+
+  console.log(`Splice array is : ${pressed.splice(-secretCode.length-1,pressed.length-secretCode.length)}`);
+  console.log(pressed);
+
+  if(pressed.join('').includes(secretCode)){
+    cornify_add();
+  }
+
+})
+
+
+</script>
+</body>
+</html>
