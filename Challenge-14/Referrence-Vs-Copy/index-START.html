@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>JS Reference VS Copy</title>
+</head>
+
+<body>
+
+  <script>
+    // start with strings, numbers and booleans
+
+    /// here age is original and age2 is just a copy of age (NOTE: age2 is not the reference of age)
+    /// because with string number and booleans the "=" like this will make a copy rather than an actual refrence to the original .
+
+    /// e.g here age is 100 and age2 refer to age so age2 will make a copy of age and will have original value of age i.e 100.
+    /// therefore any change in the original variable will not effect the age2 because its just a copy and not a reference .
+    /// So changing age=100 to 200
+    /// will not change the value of age2.
+    let age = 100;
+    let age2 = age;
+    console.log(age, age2);
+    age = 200;
+    console.log(age, age2);
+
+    // same thing happens with the strings as well as booleans.
+    let name = 'Eren';
+    let name2 = name;
+    console.log(name, name2);
+    name = 'Jaegar';
+    console.log(name, name2);
+
+    // Let's say we have an array
+    const players = ['Wes', 'Sarah', 'Ryan', 'Poppy'];
+    
+    // and we want to make a copy of it.
+  
+    // You might think we can just do something like this:
+    const team = players;
+    
+    // however what happens when we update that array?
+    team[3]='Lux'
+
+    // now here is the problem!
+
+    /// In array simple newVariable"="oldVariable does not means copying content of oldVariable to newVariable.
+    /// it simply means newVariable will now points to oldVariable for its content
+    /// And any change in the newVariable will also result in change inside oldVariable 
+
+    /// here on changing the value of team at index 3 will also change the value of players at index3
+    /// because team is not the copy of players array , it is just a reference to players.
+    /// reason behind this is array cannot be copied like string, numbers or booleans are copied in js.
+    /// so any change in the team array will also effect the players array.
+  
+    /// e.g here replacing 'Poppy' with 'Lux' in teams will change the 'Poppy' in players array also.
+    /// as team[3]='Lux'
+    /// the machine will think that we want to change the value of the array which we are referring to
+    /// here in this case is players array
+    console.log(players,team);
+
+    // oh no - we have edited the original array too!
+
+    // Why? It's because that is an array reference, not an array copy. They both point to the same array!
+
+    // So, how do we fix this? We take a copy instead!
+
+    // one way
+
+    
+    /// There are many ways to copy an array
+    const team2=players.slice();
+
+    // or create a new array and concat the old one in
+    const team3 = [].concat(players);
+
+    // or use the new ES6 Spread
+    const team4=[...players];
+
+    const team5=Array.from(players);
+
+    // now when we update it, the original one isn't changed
+    team5[3]='Lisa';
+    console.log(team5,players);
+
+    // The same thing goes for objects, let's say we have a person object
+
+    // with Objects
+    const person = {
+      name: 'Wes Bos',
+      age: 80
+    };
+
+    // and think we make a copy:
+
+    const captain = person;
+    captain.name='Eren Jaegar'
+
+    console.log(person, captain);
+
+    // how do we take a copy instead?
+
+    /// One way to do it is using assign({},ObjectName,{change in any of its attribute/property}) operator.
+    
+    /// in .assign() first declare empty object by {} ',' followed object name u want to copy from.
+    /// atlast(OPTIONAL) change any attributes of that object if u want to inside {} operator 
+    
+    const captain2= Object.assign({},person,{name: 'Levi Ackerman', age:50});
+    console.log(captain2,person);
+    
+    /// Second way of doing it by using {...ObjectName} Spread Operator
+    const captain3= {... person};
+    console.log(captain3,person);
+    
+    // We will hopefully soon see the object ...spread
+    
+    /// Some drawbacks of apply() function 
+    const protagonist = {
+      name: 'Eren Jaegar',
+      age: 21,
+      power:{
+        attackTitan: 'Can see future',
+        foundingTitan: 'Can control all other titans including "WALL TITANS"',
+        warHammerTitan: 'Can create hardening weapons out of his body'
+      },
+      character:'HERO',
+      social:{
+        twitter:'@GodOfAllTime',
+        email: 'godofalltime@gmail.com'
+      }
+    }
+    
+    /// However the assign() function will only provide one layer deep copy of the object
+    /// because the assign() function only provide one layer of copy and all the inside layers(objects) will be referenced
+    /// For e.g if u change the value of twitter inside the social object of protagonist2
+    /// then it will also change the value of twitter inside the protagonist
+    
+    const protagonist2= Object.assign({},protagonist)
+    protagonist2.social.twitter='@noGodOfAllTime';
+    /// after the above line the value of twitter of both object(protagonist and protagonist2) will change
+
+    console.log(protagonist2.social.twitter,protagonist.social.twitter);
+    console.log('Here the twitter value of both protagonist2 and protagonist will change');
+
+    /// One way to overcome this is to use json.parse(json.stringify(ObjectName))
+    /// By this way the json.stringigy will first convert the object into string by " " it.
+    /// Then we will use the json.parese which unstringfy or it will convert into object again.
+    /// BEWARE IT WILL HAVE PERFORMANCE ISSUES.
+
+    const protagonist3=JSON.parse(JSON.stringify(protagonist));
+    protagonist3.social.email='nogodofalltime@gmail.com';
+    console.log(protagonist3.social.email,protagonist.social.email);
+    console.log('Here the email value of protagonist3 will not effect the orginal email value of protagonist');
+
+    // Things to note - this is only 1 level deep - both for Arrays and Objects. lodash has a cloneDeep method, but you should think twice before using it.
+  </script>
+
+</body>
+
+</html>
