@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Mouse Shadow</title>
+</head>
+
+<body>
+
+  <div class="hero">
+    <h1 contenteditable>🔥WOAH!</h1>
+  </div>
+
+  <style>
+    html {
+      color: black;
+      font-family: sans-serif;
+    }
+
+    body {
+      margin: 0;
+    }
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: black;
+    }
+
+    h1 {
+      text-shadow: 10px 10px 0 rgba(0, 0, 0, 1);
+      font-size: 100px;
+    }
+  </style>
+
+  <script>
+    const hero = document.querySelector('.hero');
+    const text = document.querySelector('h1');
+
+    // here walk will be general value use for the text shadow effect.
+    const walk = 500;
+
+    function shadow(e) {
+
+      // hero.getOwnPropertyNames() gives the list of all properties/methods avalaible to hero DOM element
+
+      // width and height will be the width and height of the hero element
+      const {
+        offsetWidth: width,
+        offsetHeight: height
+      } = hero;
+
+      // offsetX and offsetY will be the coordinates of the cursor w.r.t its current element(i.e e.target element)
+      let {
+        offsetX: x,
+        offsetY: y
+      } = e;
+
+      // if the cursor moves from hero(div) element to text(h1) element the x and y coordinates will change w.r.t to the text(h1) element.
+      // so if the cursor enters the text(h1) area it will start with 0 and 0 as x and y coordinates
+
+      // to get the proper coordinate of the whole canvas
+      // offsetLeft will give how many px the upper left corner of the current element(e.target) is offset(distance between) to left of the parent container.
+      // offsetTop will give how many px the distance of the outer border of the current element(e.target) relative to the inner border of the parent container.
+      if (this != e.target) {
+        x = x + e.target.offsetLeft;
+        y = y + e.target.offsetTop;
+      }
+
+      // here x/width will give value b/w 0 and 1
+      // here x/width*walk will give value b/w 0 and walk
+      // here x/width*walk - walk/2 will give value b/w -walk/2 and walk/2
+
+      // xwalk and ywalk will be the horizontal and vertical shadow for the text-shadow property
+      const xwalk = Math.round((x / width) * walk - (walk / 2));
+      const ywalk = Math.round((y / height) * walk - (walk / 2));
+
+      console.log(xwalk, ywalk);
+
+      // xwalk*-1 will move the text horziontaly in opposite direction of the cursor
+      // ywalk*-1 will mvoe the text vertically in opposite direction of the cursor
+      text.style.textShadow = `
+        ${xwalk}px ${ywalk*-1}px 0 rgba(255,0,255),
+        ${xwalk*-1}px ${ywalk}px 0 rgba(0,255,100),
+        ${ywalk}px ${xwalk*-1}px 0 rgba(255,100,100),
+        ${ywalk*-1}px ${xwalk}px 0 rgba(100,100,200)
+      `
+
+    }
+
+    hero.addEventListener('mousemove', shadow);
+  </script>
+</body>
+
+</html>
