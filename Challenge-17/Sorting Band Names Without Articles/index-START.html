@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Sort Without Articles</title>
+</head>
+
+<body>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background: url("https://source.unsplash.com/nDqA4d5NL0k/2000x2000");
+      background-size: cover;
+      display: flex;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    #bands {
+      list-style: inside square;
+      font-size: 20px;
+      background: white;
+      width: 500px;
+      margin: auto;
+      padding: 0;
+      box-shadow: 0 0 0 20px rgba(0, 0, 0, 0.05);
+    }
+
+    #bands li {
+      border-bottom: 1px solid #efefef;
+      padding: 20px;
+    }
+
+    #bands li:last-child {
+      border-bottom: 0;
+    }
+
+    a {
+      color: #ffc600;
+      text-decoration: none;
+    }
+  </style>
+
+  <ul id="bands"></ul>
+
+  <script>
+    const bands = ['The Plot in You', 'The Devil Wears Prada', 'Pierce the Veil', 'Norma Jean', 'The Bled',
+      'Say Anything', 'The Midway State', 'We Came as Romans', 'Counterparts', 'Oh, Sleeper', 'A Skylit Drive',
+      'Anywhere But Here', 'An Old Dog'
+    ];
+
+    const bandsList= document.querySelector('#bands')
+
+    // this func will remove any article (A,An,The) in front of the string
+    // in the regex expression
+    // ^ means look from the start of the string
+    // All the character to be searched are placed inside the ()
+    // where '|' is the OR operator in the regex
+    // .trim will remove any white space from both ends of the string after the replace operation.
+    function strip(bandName){
+      return bandName.replace(/^(A |The |An )/i,'').trim();
+    }
+
+    // this will sort the band array by ignoring the articles at the starting of the string
+    // strip(a) and strip(b) will return the band names without any articles
+    // the bandSorted will still contains the articles in the band names
+    // because we didn't changed the bands array elements 
+    const bandSorted = bands.sort((a, b) => strip(a)>strip(b) ? 1 : -1);
+
+    // this func will simply return the list in html format 
+    // the join will remove any ',' in the list array
+    function populateList(bandSorted,bandsList){
+      bandsList.innerHTML =(bandSorted.map((bandName) => {
+        return `
+        <li>
+          ${bandName}
+        </li>
+        `
+      }).join(''));
+    }
+
+    populateList(bandSorted,bandsList);
+
+  </script>
+
+</body>
+
+</html>
