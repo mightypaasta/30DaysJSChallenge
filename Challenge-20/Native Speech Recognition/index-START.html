@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Speech Detection</title>
+</head>
+
+<body>
+
+  <div class="words" contenteditable>
+  </div>
+
+  <script>
+    // it will look for WEB SPEECH API (if supported by browser)
+    // window.webkitSpeechRecognition is for 
+    window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    // SpeechRecognition is the controller interface for the speech recognition service
+    // recognition is the SpeechRecognition object
+    const recognition = new SpeechRecognition();
+
+    // This will also allow the program to show the interim results
+    // interim results in short means : the word which is not yet finalized by speech API 
+    // for e.g if the user says 'hatred'
+    // then it will show both 'favourite' and 'hatred'
+    // but the final result will be replace by the word which has more CONFIDENCE(basically what system thinks is the correct word)
+    // in this 'hatred' will replace the word 'favourite'
+    recognition.interimResults = true;
+
+    // Creating <p> element to store the text returned by the API
+    let p = document.createElement('p');
+    const words = document.querySelector('.words');
+    words.append(p);
+
+    // This func will run when the speech recognition service returns a final result that has been positively recognized
+    recognition.addEventListener('result', e => {
+      // the transcript from the speech recogniton service is stored inside the e.results
+      // e.results is basically the SpeechRecognitionResultList
+      // Sometimes it can have more than one result inside this list
+      // inside this list it is furthur stored inside the SpeechRecognitionResult(first index '0' of the array)
+      // inside the first index (0) , it is stored inside the attribute called 'transcript'
+      // if we have more than one result inside the result list then we need to join their transcript
+      // to store the result in a single string of sentence inside the transcript variable
+      console.log(e.results);
+      const transcript = Array.from(e.results)
+        .map(result => result[0])
+        .map(result => result.transcript)
+        .join(' ');
+
+      // now we will display the transcript inside the <p> element
+      p.textContent = transcript;
+
+      // we will check if the result given by the speech recognition service is final or not
+      // if e.results[0] is not final then it means speech recognition service has not found the final result yet 
+      // and  will continue to look for the positive result(or most appropriate word) and set it ot final result
+      
+      // if e.results[0] is set to final then it means that speech recognition service has found the final result
+      // and then we create a new paragraph to display the next speech
+      if (e.results[0].isFinal) {
+        p = document.createElement('p');
+        const words = document.querySelector('.words');
+        words.append(p);
+      }
+      console.log(transcript);
+    });
+
+    // As soon as the speech recognition service display the result and stop listening.
+    // Run the speech recognition service again
+    recognition.addEventListener('end', recognition.start);
+
+    // This will start the speech recognition service as soon as the page loads
+    recognition.start();
+  </script>
+
+
+  <style>
+    html {
+      font-size: 10px;
+    }
+
+    body {
+      background: #ffc600;
+      font-family: 'helvetica neue';
+      font-weight: 200;
+      font-size: 20px;
+    }
+
+    .words {
+      max-width: 500px;
+      margin: 50px auto;
+      background: white;
+      border-radius: 5px;
+      box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.1);
+      padding: 1rem 2rem 1rem 5rem;
+      background: -webkit-gradient(linear, 0 0, 0 100%, from(#d9eaf3), color-stop(4%, #fff)) 0 4px;
+      background-size: 100% 3rem;
+      position: relative;
+      line-height: 3rem;
+    }
+
+    p {
+      margin: 0 0 3rem;
+    }
+
+    .words:before {
+      content: '';
+      position: absolute;
+      width: 4px;
+      top: 0;
+      left: 30px;
+      bottom: 0;
+      border: 1px solid;
+      border-color: transparent #efe4e4;
+    }
+  </style>
+
+</body>
+
+</html>
