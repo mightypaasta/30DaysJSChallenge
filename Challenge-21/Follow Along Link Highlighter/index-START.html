@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>👀👀👀Follow Along Nav</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <nav>
+    <ul class="menu">
+      <li><a href="">Home</a></li>
+      <li><a href="">Order Status</a></li>
+      <li><a href="">Tweets</a></li>
+      <li><a href="">Read Our History</a></li>
+      <li><a href="">Contact Us</a></li>
+    </ul>
+  </nav>
+
+  <div class="wrapper">
+    <p>Lorem ipsum dolor sit amet, <a href="">consectetur</a> adipisicing elit. Est <a href="">explicabo</a> unde natus
+      necessitatibus esse obcaecati distinctio, aut itaque, qui vitae!</p>
+    <p>Aspernatur sapiente quae sint <a href="">soluta</a> modi, atque praesentium laborum pariatur earum <a
+        href="">quaerat</a> cupiditate consequuntur facilis ullam dignissimos, aperiam quam veniam.</p>
+    <p>Cum ipsam quod, incidunt sit ex <a href="">tempore</a> placeat maxime <a href="">corrupti</a> possimus <a
+        href="">veritatis</a> ipsum fugit recusandae est doloremque? Hic, <a href="">quibusdam</a>, nulla.</p>
+    <p>Esse quibusdam, ad, ducimus cupiditate <a href="">nulla</a>, quae magni odit <a href="">totam</a> ut consequatur
+      eveniet sunt quam provident sapiente dicta neque quod.</p>
+    <p>Aliquam <a href="">dicta</a> sequi culpa fugiat <a href="">consequuntur</a> pariatur optio ad minima, maxime <a
+        href="">odio</a>, distinctio magni impedit tempore enim repellendus <a href="">repudiandae</a> quas!</p>
+  </div>
+
+  <script>
+  // first we  will select all the anchor tags to be highlighted
+  // then we create a span element to give highlight to the anchor tag
+  const triggers = document.querySelectorAll('a');
+  const highlight = document.createElement('span');
+  highlight.className='highlight'
+  document.body.append(highlight);
+
+  // This func will run when the mouse hovers/mouse enters inside the anchor tag
+  // this.getBoundingClientRect will return a DOMRect object for the anchor tag we are hovering on
+  // DOMRect will give all details about size and position of the selected element w.r.t/relative to the viewport
+  // for e.g DOMRect.left will give how many px it is away from the left side of the viewport
+  // we will set the highlight width and size to that of the anchor element which we are hovering on
+  // To position the highlight(span) at the same place of the selected anchor tag
+  // we will use the DOMRect.left and DOMRect.top 
+
+  // But since our DOMRect is relative to the viewport
+  // if we scroll there might be an issue because for e.g : when we transform : translate(100px)
+  // it will translate to 100px away from the left of the viewport in no horizontal scroll condition.
+  // But if we scroll horizontally 40px then it will not translate to 100px left of the viewport
+  // but it will appear that it has only translated to 60px of the viewport
+  
+  // Because the transform : translate(100px ) property does not translate w.r.t viewport
+  // but it rather translate w.r.t orginal document 
+  // So in this case as we have moved 40px away from the left side of the document
+  // The left side our viewport is now 40px away from the left side of the document.
+  // So the translate property will only move 60px from the left side of the viewport.
+  function highlightClick(){
+    const linkCoords = this.getBoundingClientRect();
+    highlight.style.width = `${linkCoords.width}px`;
+    highlight.style.height = `${linkCoords.height}px`;
+    highlight.style.transform = `translate(${linkCoords.left+window.scrollX}px, ${linkCoords.top+window.scrollY}px)`
+  }
+  
+  triggers.forEach(a => a.addEventListener('mouseenter', highlightClick))
+  </script>
+</body>
+
+</html>
